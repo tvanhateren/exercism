@@ -24,7 +24,24 @@
 
 declare(strict_types=1);
 
+define("COLORS", [
+    "black",
+    "brown",
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "blue",
+    "violet",
+    "grey",
+    "white",
+]);
+
 function colorCode(string $color): int
 {
-    throw new \BadFunctionCallException("Implement the colorCode function");
+    foreach (COLORS as $index => $value) {
+        if (strcasecmp($color, $value) == 0) {
+            return $index;
+        }
+    }
 }
