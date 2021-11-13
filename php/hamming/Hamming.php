@@ -26,5 +26,18 @@ declare(strict_types=1);
 
 function distance(string $strandA, string $strandB): int
 {
-    throw new \BadFunctionCallException("Implement the distance function");
+    $len = strlen($strandA);
+    if (strlen($strandB) != $len) {
+        throw new \InvalidArgumentException("Strands are not equal in length");
+    }
+
+    $result = 0;
+
+    for ($i = 0; $i < $len; $i++) {
+        if ($strandA[$i] !== $strandB[$i]) {
+            $result += 1;
+        }
+    }
+
+    return $result;
 }
