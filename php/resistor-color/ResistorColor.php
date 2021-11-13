@@ -36,12 +36,9 @@ define("COLORS", [
     "grey",
     "white",
 ]);
+define("COLOR_MAP", array_flip(COLORS));
 
 function colorCode(string $color): int
 {
-    foreach (COLORS as $index => $value) {
-        if (strcasecmp($color, $value) == 0) {
-            return $index;
-        }
-    }
+    return COLOR_MAP[$color];
 }
