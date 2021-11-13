@@ -26,5 +26,6 @@ declare(strict_types=1);
 
 function from(DateTimeImmutable $date): DateTimeImmutable
 {
-    throw new \BadFunctionCallException("Implement the from function");
+    $gigasecond = new DateInterval("PT1000000000S");
+    return $date->add($gigasecond);
 }
