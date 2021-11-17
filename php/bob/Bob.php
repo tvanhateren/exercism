@@ -23,32 +23,18 @@
  */
 
 declare(strict_types=1);
-
-function reduce_upper_lower(array $carry, string $item)
-{
-    $char_value = ord($item);
-
-    if ($char_value >= ord('a') && $char_value <= ord('z')) {
-        $carry["lower"] += 1;
-    } else if ($char_value >= ord('A') && $char_value <= ord('Z')) {
-        $carry["upper"] += 1;
-    }
-
-    return $carry;
-}
-
 class Bob
 {
     public function respondTo(string $str): string
     {
-        $str = trim($str);
+        // Remove whitespace before the end of the line
+        $str = mb_ereg_replace("\s+$", "", $str);
 
         $is_quiet = strlen($str) === 0;
 
         $is_question = str_ends_with($str, "?");
 
-        $summary = array_reduce(str_split($str), "reduce_upper_lower", array("upper" => 0, "lower" => 0));
-        $is_screaming = $summary["upper"] > 0 && $summary["lower"] == 0;
+        $is_screaming = mb_convert_case($str, MB_CASE_UPPER) === $str && mb_convert_case($str, MB_CASE_LOWER) !== $str;
 
         if ($is_quiet) {
             return "Fine. Be that way!";
