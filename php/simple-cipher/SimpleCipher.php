@@ -24,18 +24,70 @@
 
 declare(strict_types=1);
 
+function ctoi(string $char): int
+{
+    return ord($char) - ord('a');
+}
+
+function itoc(int $val): string
+{
+    return chr($val + ord('a'));
+}
+
+function generate_key(int $len): string
+{
+    $str = "";
+
+    for ($i = 0; $i < $len; $i++) {
+        $str .= chr(rand(ord('a'), ord('z')));
+    }
+
+    return $str;
+}
+
 class SimpleCipher
 {
     public function __construct(string $key = null)
     {
-        throw new BadFunctionCallException("Please implement the SimpleCipher class!");
+        // Test if the key contains only characters between 'a' and 'z'
+        if (
+            isset($key)
+            && count(
+                array_filter(
+                    str_split($key),
+                    fn (string $char): bool => ctoi($char) < ctoi('a') || ctoi($char) > ctoi('z')
+                )
+            ) > 0
+        ) {
+            throw new InvalidArgumentException();
+        }
+
+        // If no key is provided generate a new key
+        $this->key = $key ?? generate_key(10);
+        $this->key_len = strlen($this->key);
     }
 
     public function encode(string $plainText): string
     {
+        $len = strlen($plainText);
+        $cipherText = "";
+
+        for ($i = 0; $i < $len; $i++) {
+            $cipherText[$i] = itoc((ctoi($plainText[$i]) + ctoi($this->key[$i % $this->key_len])) % 26);
+        }
+
+        return $cipherText;
     }
 
     public function decode(string $cipherText): string
     {
+        $len = strlen($cipherText);
+        $plainText = "";
+
+        for ($i = 0; $i < $len; $i++) {
+            $plainText[$i] = itoc((ctoi($cipherText[$i]) - ctoi($this->key[$i % $this->key_len])) % 26);
+        }
+
+        return $plainText;
     }
 }
