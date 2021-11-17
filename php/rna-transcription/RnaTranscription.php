@@ -24,7 +24,21 @@
 
 declare(strict_types=1);
 
+function rnaComplement(string $c): string
+{
+    switch ($c) {
+        case 'G':
+            return 'C';
+        case 'C':
+            return 'G';
+        case 'T':
+            return 'A';
+        case 'A':
+            return 'U';
+    }
+}
+
 function toRna(string $dna): string
 {
-    throw new \BadFunctionCallException("Implement the toRna function");
+    return implode(array_map('rnaComplement', str_split($dna)));
 }
