@@ -36,20 +36,17 @@ class Bob
 
         $is_screaming = mb_convert_case($str, MB_CASE_UPPER) === $str && mb_convert_case($str, MB_CASE_LOWER) !== $str;
 
-        if ($is_quiet) {
-            return "Fine. Be that way!";
-        } else if ($is_screaming) {
-            if ($is_question) {
+        switch (true) {
+            case $is_quiet:
+                return "Fine. Be that way!";
+            case $is_screaming && $is_question:
                 return "Calm down, I know what I'm doing!";
-            } else {
+            case $is_screaming:
                 return "Whoa, chill out!";
-            }
-        } else {
-            if ($is_question) {
+            case $is_question:
                 return "Sure.";
-            } else {
+            default:
                 return "Whatever.";
-            }
         }
     }
 }
