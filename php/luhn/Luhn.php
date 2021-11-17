@@ -24,7 +24,36 @@
 
 declare(strict_types=1);
 
+function double_luhn_digits(array $digits, int $len): array
+{
+    for ($i = $len - 2; $i >= 0; $i -= 2) {
+        $digits[$i] *= 2;
+        if ($digits[$i] > 9) {
+            $digits[$i] -= 9;
+        }
+    }
+
+    return $digits;
+}
+
 function isValid(string $number): bool
 {
-    throw new \BadFunctionCallException("Implement the isValid function");
+    // Test for invalid characters
+    if (mb_ereg("[^0-9\s]", $number)) {
+        return false;
+    }
+
+    // Remove any whitespace
+    $number = mb_ereg_replace("\s", "", $number);
+
+    $digits = str_split($number);
+    $len = count($digits);
+
+    if ($len <= 1) {
+        return false;
+    }
+
+    $digits = double_luhn_digits($digits, $len);
+
+    return array_sum($digits) % 10 === 0;
 }
