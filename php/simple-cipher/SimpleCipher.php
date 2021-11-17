@@ -45,6 +45,14 @@ function generate_key(int $len): string
     return $str;
 }
 
+function mod(int $a, int $b): int
+{
+    $res = $a % $b;
+    if ($res < 0) $res += $b;
+
+    return $res;
+}
+
 class SimpleCipher
 {
     public function __construct(string $key = null)
@@ -65,6 +73,9 @@ class SimpleCipher
         // If no key is provided generate a new key
         $this->key = $key ?? generate_key(10);
         $this->key_len = strlen($this->key);
+
+        echo "\$key: " . $this->key;
+        print_r($this->key);
     }
 
     public function encode(string $plainText): string
@@ -73,7 +84,7 @@ class SimpleCipher
         $cipherText = "";
 
         for ($i = 0; $i < $len; $i++) {
-            $cipherText[$i] = itoc((ctoi($plainText[$i]) + ctoi($this->key[$i % $this->key_len])) % 26);
+            $cipherText[$i] = itoc(mod((ctoi($plainText[$i]) + ctoi($this->key[$i % $this->key_len])), 26));
         }
 
         return $cipherText;
@@ -85,7 +96,7 @@ class SimpleCipher
         $plainText = "";
 
         for ($i = 0; $i < $len; $i++) {
-            $plainText[$i] = itoc((ctoi($cipherText[$i]) - ctoi($this->key[$i % $this->key_len])) % 26);
+            $plainText[$i] = itoc(mod((ctoi($cipherText[$i]) - ctoi($this->key[$i % $this->key_len])), 26));
         }
 
         return $plainText;
