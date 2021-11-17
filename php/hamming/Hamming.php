@@ -28,7 +28,7 @@ function distance(string $strandA, string $strandB): int
 {
     $len = strlen($strandA);
     if (strlen($strandB) != $len) {
-        throw new \InvalidArgumentException("Strands are not equal in length");
+        throw new \InvalidArgumentException("DNA strands must be of equal length.");
     }
 
     $result = 0;
