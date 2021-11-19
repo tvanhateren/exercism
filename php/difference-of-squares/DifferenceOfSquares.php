@@ -26,15 +26,15 @@ declare(strict_types=1);
 
 function squareOfSum(int $max): int
 {
-    return pow(array_sum(range(1, $max)), 2);
+    return pow($max * ($max + 1) / 2, 2);
 }
 
 function sumOfSquares(int $max): int
 {
-    return array_sum(array_map(fn ($num) => pow($num, 2), range(1, $max)));
+    return $max * ($max + 1) * (2 * $max + 1) / 6;
 }
 
 function difference(int $max): int
 {
-    return abs(squareOfSum($max) - sumOfSquares($max));
+    return squareOfSum($max) - sumOfSquares($max);
 }
