@@ -1,30 +1,29 @@
 <?php
 
-/*
- * By adding type hints and enabling strict type checking, code can become
- * easier to read, self-documenting and reduce the number of potential bugs.
- * By default, type declarations are non-strict, which means they will attempt
- * to change the original type to match the type specified by the
- * type-declaration.
- *
- * In other words, if you pass a string to a function requiring a float,
- * it will attempt to convert the string value to a float.
- *
- * To enable strict mode, a single declare directive must be placed at the top
- * of the file.
- * This means that the strictness of typing is configured on a per-file basis.
- * This directive not only affects the type declarations of parameters, but also
- * a function's return type.
- *
- * For more info review the Concept on strict type checking in the PHP track
- * <link>.
- *
- * To disable strict typing, comment out the directive below.
- */
-
 declare(strict_types=1);
 
-function rebase(int $number, array $sequence, int $base)
+function rebase(int $from_base, array $sequence, int $to_base)
 {
-    throw new \BadFunctionCallException("Implement the rebase function");
+    if (
+        $sequence == [] // Empty sequence
+        || reset($sequence) == 0 // Leading digit is zero
+        || $from_base < 2 // Invalid source base
+        || $to_base < 2 // Invalid destination base
+        || count(array_filter($sequence, fn ($num) => $num < 0 || $num >= $from_base)) > 0 // Invalid digit in sequence
+    ) {
+        return null;
+    }
+
+    // Convert sequence to int
+    $number = array_reduce($sequence, fn ($acc, $digit) => $acc * $from_base + $digit, 0);
+
+    // Convert int back to sequence of different base
+    $result = [];
+    while ($number >= $to_base) {
+        $result[] = $number % $to_base;
+        $number /= $to_base;
+    }
+    $result[] = (int) $number;
+
+    return array_reverse($result);
 }
