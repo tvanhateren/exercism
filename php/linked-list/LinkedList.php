@@ -25,16 +25,16 @@ class LinkedList
         // List is empty
         if ($this->head === null) {
             $this->head = &$node;
-            $this->tail = &$node;
         } else { // List has at least one element
             $node->prev = &$this->tail;
             $this->tail->next = &$node;
-            $this->tail = &$node;
         }
+
+        $this->tail = &$node;
     }
 
     // Remove from tail
-    public function pop(): int
+    public function pop(): int | null
     {
         // List is empty
         if ($this->tail === null) return null;
@@ -55,7 +55,7 @@ class LinkedList
     }
 
     // Remove from head
-    public function shift(): int
+    public function shift(): int | null
     {
         // List is empty
         if ($this->tail === null) return null;
@@ -82,12 +82,12 @@ class LinkedList
 
         // List is empty
         if ($this->head === null) {
-            $this->head = &$node;
             $this->tail = &$node;
         } else { // List has at least one element
             $this->head->prev = &$node;
             $node->next = &$this->head;
-            $this->head = &$node;
         }
+
+        $this->head = &$node;
     }
 }
