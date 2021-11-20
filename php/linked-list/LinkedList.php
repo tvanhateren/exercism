@@ -1,33 +1,93 @@
 <?php
 
-/*
- * By adding type hints and enabling strict type checking, code can become
- * easier to read, self-documenting and reduce the number of potential bugs.
- * By default, type declarations are non-strict, which means they will attempt
- * to change the original type to match the type specified by the
- * type-declaration.
- *
- * In other words, if you pass a string to a function requiring a float,
- * it will attempt to convert the string value to a float.
- *
- * To enable strict mode, a single declare directive must be placed at the top
- * of the file.
- * This means that the strictness of typing is configured on a per-file basis.
- * This directive not only affects the type declarations of parameters, but also
- * a function's return type.
- *
- * For more info review the Concept on strict type checking in the PHP track
- * <link>.
- *
- * To disable strict typing, comment out the directive below.
- */
-
 declare(strict_types=1);
+
+class Node
+{
+    function __construct(
+        public int $data,
+        public ?Node $prev = null,
+        public ?Node $next = null
+    ) {
+    }
+}
 
 class LinkedList
 {
-    public function __construct()
+    private ?Node $head = null;
+    private ?Node $tail = null;
+
+    // Add after tail
+    public function push(int $data)
     {
-        throw new BadFunctionCallException("Please implement the LinkedList class!");
+        $node = new Node($data);
+
+        // List is empty
+        if ($this->head === null) {
+            $this->head = &$node;
+            $this->tail = &$node;
+        } else { // List has at least one element
+            $node->prev = &$this->tail;
+            $this->tail->next = &$node;
+            $this->tail = &$node;
+        }
+    }
+
+    // Remove from tail
+    public function pop(): int
+    {
+        // List is empty
+        if ($this->tail === null) return null;
+
+        // List has one element
+        if ($this->tail->prev === null) {
+            $result = $this->head;
+            $this->head = null;
+            $this->tail = null;
+            return $result->data;
+        }
+
+        // List has two or more elements
+        $old_tail = $this->tail;
+        $this->tail = &$old_tail->prev;
+        $this->tail->next = null;
+        return $old_tail->data;
+    }
+
+    // Remove from head
+    public function shift(): int
+    {
+        // List is empty
+        if ($this->tail === null) return null;
+
+        // List has one element
+        if ($this->head->next === null) {
+            $result = $this->head;
+            $this->head = null;
+            $this->tail = null;
+            return $result->data;
+        }
+
+        // List has two or more elements
+        $old_head = $this->head;
+        $this->head = &$old_head->next;
+        $this->head->prev = null;
+        return $old_head->data;
+    }
+
+    // Add before head
+    public function unshift(int $data)
+    {
+        $node = new Node($data);
+
+        // List is empty
+        if ($this->head === null) {
+            $this->head = &$node;
+            $this->tail = &$node;
+        } else { // List has at least one element
+            $this->head->prev = &$node;
+            $node->next = &$this->head;
+            $this->head = &$node;
+        }
     }
 }
