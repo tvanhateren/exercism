@@ -1,43 +1,51 @@
 <?php
 
-/*
- * By adding type hints and enabling strict type checking, code can become
- * easier to read, self-documenting and reduce the number of potential bugs.
- * By default, type declarations are non-strict, which means they will attempt
- * to change the original type to match the type specified by the
- * type-declaration.
- *
- * In other words, if you pass a string to a function requiring a float,
- * it will attempt to convert the string value to a float.
- *
- * To enable strict mode, a single declare directive must be placed at the top
- * of the file.
- * This means that the strictness of typing is configured on a per-file basis.
- * This directive not only affects the type declarations of parameters, but also
- * a function's return type.
- *
- * For more info review the Concept on strict type checking in the PHP track
- * <link>.
- *
- * To disable strict typing, comment out the directive below.
- */
-
 declare(strict_types=1);
+
+function bottles_of_beer(int $number, bool $capital): string
+{
+    $n = $number == 0 ? (($capital ? "N" : "n") . "o more") : "$number";
+    $s = $number == 1 ? "" : "s";
+
+    return "$n bottle$s of beer";
+}
+
+function take($number): string
+{
+    $subj = $number >= 2 ? "one" : "it";
+    return $number == 0 ? "Go to the store and buy some more" : "Take $subj down and pass it around";
+}
+
+function mod($a, $b)
+{
+    $result = $a % $b;
+    if ($result < 0) $result += $b;
+    return $result;
+}
 
 class BeerSong
 {
     public function verse(int $number): string
     {
-        throw new \BadMethodCallException("Implement the verse method");
+        $le = $number == 0 ? "" : "\n";
+        return sprintf("%s on the wall, %s.\n", bottles_of_beer($number, true), bottles_of_beer($number, false)) .
+            sprintf("%s, %s on the wall.%s", take($number), bottles_of_beer(mod($number - 1, 100), false), $le);
     }
 
     public function verses(int $start, int $finish): string
     {
-        throw new \BadMethodCallException("Implement the verses method");
+        $result = "";
+
+        for ($i = $start; $i > $finish; $i--) {
+            $result .= $this->verse($i) . "\n";
+        }
+        $result .= $this->verse($i);
+
+        return $result;
     }
 
     public function lyrics(): string
     {
-        throw new \BadMethodCallException("Implement the lyrics method");
+        return $this->verses(99, 0);
     }
 }
