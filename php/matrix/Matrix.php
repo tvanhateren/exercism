@@ -26,8 +26,24 @@ declare(strict_types=1);
 
 class Matrix
 {
-    public function __construct()
+    private $data = [];
+
+    public function __construct(string $input)
     {
-        throw new BadFunctionCallException("Please implement the Matrix class!");
+        $rows = explode('\n', $input);
+        foreach ($rows as $row) {
+            $row = explode(" ", $row);
+            $this->data[] = array_map("intval", $row);
+        }
+    }
+
+    public function getRow(int $row): array
+    {
+        return $this->data[$row - 1];
+    }
+
+    public function getColumn(int $col): array
+    {
+        return array_column($this->data, $col - 1);
     }
 }
